@@ -38,6 +38,9 @@ export default function Index({ navigateToPage }) {
     setAccountList(accountList);
     chrome.storage.sync.get(['account_index'], async function (items) {
       if (typeof items.account_index === 'undefined') {
+        chrome.storage.sync.set({ 'account_uid': accountList[accountIndex].game_uid }, function () {
+          console.log('Value uid is set to ' + accountList[accountIndex].game_uid);
+        });
         setAccount(accountList[accountIndex]);
         const records = await genshinRecord(cookies, accountList[accountIndex].game_uid);
         if (records.error) {
@@ -86,7 +89,10 @@ export default function Index({ navigateToPage }) {
   function changeAccount(value) {
     setAccountIndex(Number(value));
     chrome.storage.sync.set({ 'account_index': Number(value) }, function () {
-      console.log('Value is set to ' + Number(value));
+      console.log('Value index is set to ' + Number(value));
+    });
+    chrome.storage.sync.set({ 'account_uid': accountList[Number(value)].game_uid }, function () {
+      console.log('Value uid is set to ' + accountList[Number(value)].game_uid);
     });
 
     getData(cookies);
