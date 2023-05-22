@@ -25,6 +25,9 @@ chrome.storage.sync.get(['account_uid'], function (items) {
           "mode": "cors",
           "credentials": "include"
         }).then(response => response.json()).then(data => {
+          if (data.retcode != 0) {
+            return;
+          }
           chrome.action.setBadgeText({ text: data.data.current_resin.toString() });
         });
       } else {
@@ -32,7 +35,7 @@ chrome.storage.sync.get(['account_uid'], function (items) {
         console.log('No cookies found');
       }
     });
-    setTimeout(updateCounter, 60*1000);
+    setTimeout(updateCounter, 8*60*1000);
   };
   updateCounter();
 });
